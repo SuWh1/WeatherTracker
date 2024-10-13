@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Forecast</title>
+    <style>        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e0f7fa;
+            color: #333;
+            text-align: center;
+            padding: 50px;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #00796b;
+            margin-bottom: 20px;
+        }
+        .weather-info {
+            margin-top: 20px;
+            border-top: 2px solid #00796b;
+            padding-top: 20px;
+        }
+        .weather-info p {
+            font-size: 18px;
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+        input,
+        select {
+            padding: 12px;
+            font-size: 16px;
+            width: 80%;
+            margin-top: 10px;
+            border: 2px solid #00796b;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+        input:focus,
+        select:focus {
+            border-color: #004d40;
+            outline: none;
+        }
+        button {
+            margin-top: 15px;
+            padding: 12px 20px;
+            font-size: 16px;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #004d40;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather Forecast</h1>
+        <form method="GET" action="/weather">
+            <input type="text" name="city" placeholder="Enter city" required />
+            <select name="unit">
+                <option value="metric">Celsius</option>
+                <option value="imperial">Fahrenheit</option>
+            </select>
+            <button type="submit">Show</button>
+        </form>
+        <div class="weather-info">
+            {{if .Error}}
+                <p>{{.Error}}</p>
+            {{else if .Weather.Name}}
+                <p><strong>City:</strong> {{.Weather.Name}}</p>
+                <p><strong>Temperature:</strong> {{.Weather.Main.Temperature}} °{{if eq .Unit "metric"}}C{{else}}F{{end}}</p>
+                <p><strong>Humidity:</strong> {{.Weather.Main.Humidity}}%</p>
+                <p><strong>Wind Speed:</strong> {{.Weather.Wind.Speed}} m/s</p>
+                <p><strong>Conditions:</strong>
+                    {{if (gt (len .Weather.Weather) 0)}}
+                        {{range .Weather.Weather}}
+                            {{.Description}} 
+                        {{end}}
+                    {{else}} No condition available {{end}}
+                </p>
+            {{end}}
+        </div>    
+    </div>
+</body>
+</html>
